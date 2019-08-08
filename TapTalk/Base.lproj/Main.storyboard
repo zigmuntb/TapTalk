@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--View Controller-->
+        <scene sceneID="tne-QT-ifu">
+            <objects>
+                <viewController storyboardIdentifier="Page1" id="BYZ-38-t0r" customClass="ViewController" customModule="TapTalk" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vaC-Lo-WKy" userLabel="backgroundView">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                                <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            </view>
+                            <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="71" translatesAutoresizingMaskIntoConstraints="NO" id="tvf-VQ-Lsv">
+                                <rect key="frame" x="21" y="28" width="333" height="33"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="v2g-5x-Vnl">
+                                        <rect key="frame" x="0.0" y="0.0" width="30" height="33"/>
+                                        <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="17"/>
+                                        <state key="normal" title="IT">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="didSelectLanguage:" destination="BYZ-38-t0r" eventType="touchUpInside" id="zkW-fB-EhF"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="u1w-QZ-rko">
+                                        <rect key="frame" x="101" y="0.0" width="30" height="33"/>
+                                        <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="17"/>
+                                        <state key="normal" title="RU">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="didSelectLanguage:" destination="BYZ-38-t0r" eventType="touchUpInside" id="psc-Vy-YO0"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="52m-UM-zvv">
+                                        <rect key="frame" x="202" y="0.0" width="30" height="33"/>
+                                        <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="17"/>
+                                        <state key="normal" title="FR">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="didSelectLanguage:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Egv-Pi-Il4"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" tag="3" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ANd-rN-da2">
+                                        <rect key="frame" x="303" y="0.0" width="30" height="33"/>
+                                        <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="17"/>
+                                        <state key="normal" title="DE">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="didSelectLanguage:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Hip-gh-HV9"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                            </stackView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" numberOfLines="4" baselineAdjustment="alignBaselines" minimumFontSize="18" translatesAutoresizingMaskIntoConstraints="NO" id="PP8-sO-XKc">
+                                <rect key="frame" x="32" y="86" width="311" height="48"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="40"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" red="0.88964080810546875" green="0.79708957672119141" blue="0.0092243654653429985" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <gestureRecognizers/>
+                        <constraints>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="tvf-VQ-Lsv" secondAttribute="trailing" constant="21" id="5lK-5U-hsW"/>
+                            <constraint firstItem="tvf-VQ-Lsv" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="8" id="9Z5-dK-Jkv"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="PP8-sO-XKc" secondAttribute="trailing" constant="32" id="E6V-3x-cVo"/>
+                            <constraint firstItem="vaC-Lo-WKy" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="GTw-dK-sR7"/>
+                            <constraint firstItem="tvf-VQ-Lsv" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="21" id="OyG-C9-alz"/>
+                            <constraint firstItem="vaC-Lo-WKy" firstAttribute="bottom" secondItem="6Tk-OE-BBY" secondAttribute="bottom" id="WdU-pa-vRu"/>
+                            <constraint firstItem="vaC-Lo-WKy" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="qQs-GE-d5y"/>
+                            <constraint firstItem="vaC-Lo-WKy" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="qxQ-jc-Rlp"/>
+                            <constraint firstItem="PP8-sO-XKc" firstAttribute="top" secondItem="tvf-VQ-Lsv" secondAttribute="bottom" constant="25" id="v6q-GV-6x3"/>
+                            <constraint firstItem="PP8-sO-XKc" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="32" id="vMt-1u-YJQ"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
+                        <connections>
+                            <outletCollection property="gestureRecognizers" destination="ZZ9-k4-jnI" appends="YES" id="fZb-GB-ibj"/>
+                        </connections>
+                    </view>
+                    <connections>
+                        <outlet property="backgroundView" destination="vaC-Lo-WKy" id="TvF-CW-2aI"/>
+                        <outlet property="textLabel" destination="PP8-sO-XKc" id="BFH-Yk-hm4"/>
+                        <outletCollection property="languageButtons" destination="v2g-5x-Vnl" collectionClass="NSMutableArray" id="9QQ-rr-QYI"/>
+                        <outletCollection property="languageButtons" destination="u1w-QZ-rko" collectionClass="NSMutableArray" id="EsZ-Ho-B6A"/>
+                        <outletCollection property="languageButtons" destination="52m-UM-zvv" collectionClass="NSMutableArray" id="5Eq-tw-fBO"/>
+                        <outletCollection property="languageButtons" destination="ANd-rN-da2" collectionClass="NSMutableArray" id="cvr-iw-XZ1"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
+                <pongPressGestureRecognizer allowableMovement="10" minimumPressDuration="0.5" id="ZZ9-k4-jnI">
+                    <connections>
+                        <action selector="longGestureRecognizer:" destination="BYZ-38-t0r" id="9wM-hk-rVd"/>
+                    </connections>
+                </pongPressGestureRecognizer>
+            </objects>
+            <point key="canvasLocation" x="661.60000000000002" y="106.59670164917542"/>
+        </scene>
+    </scenes>
+</document>
