@@ -49,7 +49,6 @@ class ViewController: UIViewController, SFSpeechRecognizerDelegate {
 				self.recordAndRecognizeSpeech()
 			})
 			
-			
 			print("Long gesture began")
 			
 		}
@@ -78,7 +77,7 @@ class ViewController: UIViewController, SFSpeechRecognizerDelegate {
 					print("URL is not valid!")
 					return
 				}
-				//			requestTranslationData(with: url)
+				self.requestTranslationData(with: url)
 
 			})
 			
