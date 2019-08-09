@@ -9,6 +9,7 @@
 import UIKit
 import Speech
 import SwiftyJSON
+import AVFoundation
 
 class ViewController: UIViewController, SFSpeechRecognizerDelegate {
 	
@@ -16,6 +17,7 @@ class ViewController: UIViewController, SFSpeechRecognizerDelegate {
 	let speechRecognizer: SFSpeechRecognizer? = SFSpeechRecognizer()
 	let request = SFSpeechAudioBufferRecognitionRequest()
 	var recognitionTask: SFSpeechRecognitionTask?
+	var speechSynthesizer = AVSpeechSynthesizer()
 	
 	var selectedLanguage = "it"
 	
@@ -40,11 +42,11 @@ class ViewController: UIViewController, SFSpeechRecognizerDelegate {
 		var textForTranslation = String()
 		//MARK: - Start Speech Recognition on hold
 		if sender.state == .began {
+			textLabel.text = "Start speaking"
 			UIView.animate(withDuration: 0.3, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseIn, animations: {
 				self.view.layer.cornerRadius = 40
 				self.view.frame = CGRect(x: 20, y: 20, width: self.view.frame.width - 40, height: self.view.frame.height - 40)
 			})
-			
 			
 			recordAndRecognizeSpeech()
 			
@@ -69,15 +71,21 @@ class ViewController: UIViewController, SFSpeechRecognizerDelegate {
 			node.removeTap(onBus: 0)
 			print("Long gesture ended")
 			
-			//MARK: - Send data to translation API
-			let translateTo = self.selectedLanguage.lowercased()
-			let requestString = "https://api.mymemory.translated.net/get?q=\(textForTranslation)&langpair=en|\(translateTo)"
-			let encodedString = requestString.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed)!
-			guard let url = URL(string: encodedString) else {
-				print("URL is not valid!")
-				return
+			if textLabel.text == "Start speaking" {
+				
+			} else {
+				//MARK: - Send data to translation API
+				let translateTo = self.selectedLanguage.lowercased()
+				let requestString = "https://api.mymemory.translated.net/get?q=\(textForTranslation)&langpair=en|\(translateTo)"
+				let encodedString = requestString.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed)!
+				guard let url = URL(string: encodedString) else {
+					print("URL is not valid!")
+					return
+				}
+				self.requestTranslationData(with: url)
 			}
-			self.requestTranslationData(with: url)
+			
+			
 		}
 	}
 	
@@ -138,7 +146,40 @@ class ViewController: UIViewController, SFSpeechRecognizerDelegate {
 	}
 	
 	func updateWeatherData(json: JSON) {
+		var textForSpeech = String()
+		
+		
+		
 		if let tempResult = json["responseData"]["translatedText"].string {
+			
+			textForSpeech = tempResult
+			let speechUtterance: AVSpeechUtterance = AVSpeechUtterance(string: textForSpeech)
+			speechUtterance.rate = AVSpeechUtteranceMaximumSpeechRate / 2.0
+			speechUtterance.voice = AVSpeechSynthesisVoice(language: "ru-RU")
+			self.speechSynthesizer.speak(speechUtterance)
+			
+			
+				let audioSession = AVAudioSession.sharedInstance()
+				do {
+					
+					try! audioSession.setCategory(AVAudioSession.Category.playAndRecord)
+					try audioSession.setMode(AVAudioSession.Mode.spokenAudio)
+					
+					let currentRoute = AVAudioSession.sharedInstance().currentRoute
+					for description in currentRoute.outputs {
+						if description.portType == AVAudioSession.Port.headphones {
+							try audioSession.overrideOutputAudioPort(AVAudioSession.PortOverride.none)
+							print("headphone plugged in")
+						} else {
+							print("headphone pulled out")
+							try audioSession.overrideOutputAudioPort(AVAudioSession.PortOverride.speaker)
+						}
+					}
+					
+				} catch {
+					print("audioSession properties weren't set because of an error.")
+				}
+			
 			
 			textLabel.text = tempResult
 		}
@@ -149,7 +190,6 @@ class ViewController: UIViewController, SFSpeechRecognizerDelegate {
 	
 	func recordAndRecognizeSpeech() {
 		let node = audioEngine.inputNode
-		
 		let recordingFormat = node.outputFormat(forBus: 0)
 		node.installTap(onBus: 0, bufferSize: 1024, format: recordingFormat) { buffer, _ in
 			self.request.append(buffer)

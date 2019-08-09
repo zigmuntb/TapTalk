@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		43A598C722FDD9D200067E39 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43A598C622FDD9D200067E39 /* AVFoundation.framework */; };
 		43DEBC8222FB1ED9001196D2 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43DEBC8122FB1ED9001196D2 /* AppDelegate.swift */; };
 		43DEBC8422FB1ED9001196D2 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43DEBC8322FB1ED9001196D2 /* ViewController.swift */; };
 		43DEBC8722FB1ED9001196D2 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 43DEBC8522FB1ED9001196D2 /* Main.storyboard */; };
@@ -16,6 +17,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		43A598C622FDD9D200067E39 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		43DEBC7E22FB1ED9001196D2 /* TapTalk.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TapTalk.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		43DEBC8122FB1ED9001196D2 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		43DEBC8322FB1ED9001196D2 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -33,6 +35,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				43A598C722FDD9D200067E39 /* AVFoundation.framework in Frameworks */,
 				472ABD242C92C9F6C8E132A3 /* Pods_TapTalk.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -74,6 +77,7 @@
 		E5F1CED42E07CF90CD949BC8 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				43A598C622FDD9D200067E39 /* AVFoundation.framework */,
 				C724F3714678C8B1BD9C373F /* Pods_TapTalk.framework */,
 			);
 			name = Frameworks;
