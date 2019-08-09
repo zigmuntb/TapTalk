@@ -20,7 +20,6 @@ class ViewController: UIViewController, SFSpeechRecognizerDelegate {
 	var selectedLanguage = "it"
 	
 	@IBOutlet weak var textLabel: UILabel!
-	@IBOutlet weak var backgroundView: UIView!
 	@IBOutlet var languageButtons: [UIButton]!
 	
 	override func viewDidLoad() {
@@ -41,46 +40,44 @@ class ViewController: UIViewController, SFSpeechRecognizerDelegate {
 		var textForTranslation = String()
 		//MARK: - Start Speech Recognition on hold
 		if sender.state == .began {
-			
 			UIView.animate(withDuration: 0.3, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseIn, animations: {
-				self.backgroundView.layer.cornerRadius = 12
-				self.backgroundView.frame = CGRect(x: 20, y: 20, width: self.backgroundView.frame.width - 40, height: self.backgroundView.frame.height - 40)
-			}, completion: {(_) in
-				self.recordAndRecognizeSpeech()
+				self.view.layer.cornerRadius = 40
+				self.view.frame = CGRect(x: 20, y: 20, width: self.view.frame.width - 40, height: self.view.frame.height - 40)
 			})
 			
-			print("Long gesture began")
 			
+			recordAndRecognizeSpeech()
+			
+			print("Long gesture began")
 		}
 		
 		//MARK: - Stop Speech Recognition on release
 		if sender.state == .ended {
 			
-			UIView.animate(withDuration: 0.3, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
-				self.backgroundView.layer.cornerRadius = 0
-				self.backgroundView.frame = CGRect(x: 0 , y: 0, width: self.backgroundView.frame.width + 40, height: self.backgroundView.frame.height + 40)
-			}, completion: {(_) in
-				textForTranslation = self.textLabel.text!
-				
-				let node = self.audioEngine.inputNode
-				
-				self.audioEngine.stop()
-				self.request.endAudio()
-				node.removeTap(onBus: 0)
-				print("Long gesture ended")
-				
-				//MARK: - Send data to translation API
-				let translateTo = self.selectedLanguage.lowercased()
-				let requestString = "https://api.mymemory.translated.net/get?q=\(textForTranslation)&langpair=en|\(translateTo)"
-				let encodedString = requestString.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed)!
-				guard let url = URL(string: encodedString) else {
-					print("URL is not valid!")
-					return
-				}
-				self.requestTranslationData(with: url)
-
+			UIView.animate(withDuration: 0.3, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseIn, animations: {
+				self.view.layer.cornerRadius = 0
+				self.view.frame = CGRect(x: 0, y: 0, width: self.view.frame.width + 40, height: self.view.frame.height + 40)
 			})
 			
+			view.layer.cornerRadius = 0
+			textForTranslation = self.textLabel.text!
+			
+			let node = self.audioEngine.inputNode
+			
+			self.audioEngine.stop()
+			self.request.endAudio()
+			node.removeTap(onBus: 0)
+			print("Long gesture ended")
+			
+			//MARK: - Send data to translation API
+			let translateTo = self.selectedLanguage.lowercased()
+			let requestString = "https://api.mymemory.translated.net/get?q=\(textForTranslation)&langpair=en|\(translateTo)"
+			let encodedString = requestString.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed)!
+			guard let url = URL(string: encodedString) else {
+				print("URL is not valid!")
+				return
+			}
+			self.requestTranslationData(with: url)
 		}
 	}
 	
