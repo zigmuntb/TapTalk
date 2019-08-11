@@ -9,7 +9,6 @@
 import UIKit
 import Speech
 import SwiftyJSON
-import AVFoundation
 
 class ViewController: UIViewController, SFSpeechRecognizerDelegate {
 	
@@ -17,7 +16,6 @@ class ViewController: UIViewController, SFSpeechRecognizerDelegate {
 	let speechRecognizer: SFSpeechRecognizer? = SFSpeechRecognizer()
 	let request = SFSpeechAudioBufferRecognitionRequest()
 	var recognitionTask: SFSpeechRecognitionTask?
-	var speechSynthesizer = AVSpeechSynthesizer()
 	
 	var selectedLanguage = "it"
 	
@@ -50,7 +48,7 @@ class ViewController: UIViewController, SFSpeechRecognizerDelegate {
 			print("Long gesture ended")
 			
 			if textLabel.text == "Start speaking" {
-				
+				textLabel.text = "HOLD\nTO\nSTART\nRECORDING"
 			} else {
 				//MARK: - Send data to translation API
 				let translateTo = self.selectedLanguage.lowercased()
@@ -121,42 +119,12 @@ class ViewController: UIViewController, SFSpeechRecognizerDelegate {
 	}
 	
 	func updateTranslationData(json: JSON) {
-		var textForSpeech = String()
 		if let tempResult = json["responseData"]["translatedText"].string {
-			textForSpeech = tempResult
-			translateTextToSpeech(with: textForSpeech)
 			textLabel.text = tempResult
 		}
 		else {
 			textLabel.text = "Tranlation Unavailable"
 		}
-	}
-	
-	func translateTextToSpeech(with string: String) {
-		let speechUtterance: AVSpeechUtterance = AVSpeechUtterance(string: string)
-		speechUtterance.rate = AVSpeechUtteranceMaximumSpeechRate / 2.0
-		speechUtterance.voice = AVSpeechSynthesisVoice(language: "ru-RU")
-		self.speechSynthesizer.speak(speechUtterance)
-		
-		let audioSession = AVAudioSession.sharedInstance()
-		do {
-			try audioSession.setMode(AVAudioSession.Mode.spokenAudio)
-			
-			let currentRoute = AVAudioSession.sharedInstance().currentRoute
-			for description in currentRoute.outputs {
-				if description.portType == AVAudioSession.Port.headphones {
-					try audioSession.overrideOutputAudioPort(AVAudioSession.PortOverride.none)
-					print("headphone plugged in")
-				} else {
-					print("headphone pulled out")
-					try audioSession.overrideOutputAudioPort(AVAudioSession.PortOverride.speaker)
-				}
-			}
-			
-		} catch {
-			print("audioSession properties weren't set because of an error.")
-		}
-		
 	}
 	
 	func recordAndRecognizeSpeech() {
