@@ -31,22 +31,11 @@ class ViewController: UIViewController, SFSpeechRecognizerDelegate {
 		
 	}
 	
-	override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
-		if let touch = touches.first {
-			let position = touch.location(in: view)
-			print(position)
-		}
-	}
-	
 	@IBAction func longGestureRecognizer(_ sender: UILongPressGestureRecognizer) {
 		var textForTranslation = String()
 		//MARK: - Start Speech Recognition on hold
 		if sender.state == .began {
 			textLabel.text = "Start speaking"
-			UIView.animate(withDuration: 0.3, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseIn, animations: {
-				self.view.layer.cornerRadius = 40
-				self.view.frame = CGRect(x: 20, y: 20, width: self.view.frame.width - 40, height: self.view.frame.height - 40)
-			})
 			
 			recordAndRecognizeSpeech()
 			
@@ -56,19 +45,8 @@ class ViewController: UIViewController, SFSpeechRecognizerDelegate {
 		//MARK: - Stop Speech Recognition on release
 		if sender.state == .ended {
 			
-			UIView.animate(withDuration: 0.3, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseIn, animations: {
-				self.view.layer.cornerRadius = 0
-				self.view.frame = CGRect(x: 0, y: 0, width: self.view.frame.width + 40, height: self.view.frame.height + 40)
-			})
+			textForTranslation = textLabel.text!
 			
-			view.layer.cornerRadius = 0
-			textForTranslation = self.textLabel.text!
-			
-			let node = self.audioEngine.inputNode
-			
-			self.audioEngine.stop()
-			self.request.endAudio()
-			node.removeTap(onBus: 0)
 			print("Long gesture ended")
 			
 			if textLabel.text == "Start speaking" {
@@ -84,15 +62,12 @@ class ViewController: UIViewController, SFSpeechRecognizerDelegate {
 				}
 				self.requestTranslationData(with: url)
 			}
-			
-			
 		}
 	}
 	
 	@IBAction func didSelectLanguage(_ sender: UIButton) {
 		allDeselected()
 		selectLanguage(button: sender)
-		
 		
 		print(selectedLanguage)
 	}
@@ -136,7 +111,7 @@ class ViewController: UIViewController, SFSpeechRecognizerDelegate {
 				let translationJSON : JSON = JSON(json)
 				
 				DispatchQueue.main.async {
-					self.updateWeatherData(json: translationJSON)
+					self.updateTranslationData(json: translationJSON)
 				}
 				print(json)
 			} catch let error {
@@ -145,42 +120,11 @@ class ViewController: UIViewController, SFSpeechRecognizerDelegate {
 		}).resume()
 	}
 	
-	func updateWeatherData(json: JSON) {
+	func updateTranslationData(json: JSON) {
 		var textForSpeech = String()
-		
-		
-		
 		if let tempResult = json["responseData"]["translatedText"].string {
-			
 			textForSpeech = tempResult
-			let speechUtterance: AVSpeechUtterance = AVSpeechUtterance(string: textForSpeech)
-			speechUtterance.rate = AVSpeechUtteranceMaximumSpeechRate / 2.0
-			speechUtterance.voice = AVSpeechSynthesisVoice(language: "ru-RU")
-			self.speechSynthesizer.speak(speechUtterance)
-			
-			
-				let audioSession = AVAudioSession.sharedInstance()
-				do {
-					
-					try! audioSession.setCategory(AVAudioSession.Category.playAndRecord)
-					try audioSession.setMode(AVAudioSession.Mode.spokenAudio)
-					
-					let currentRoute = AVAudioSession.sharedInstance().currentRoute
-					for description in currentRoute.outputs {
-						if description.portType == AVAudioSession.Port.headphones {
-							try audioSession.overrideOutputAudioPort(AVAudioSession.PortOverride.none)
-							print("headphone plugged in")
-						} else {
-							print("headphone pulled out")
-							try audioSession.overrideOutputAudioPort(AVAudioSession.PortOverride.speaker)
-						}
-					}
-					
-				} catch {
-					print("audioSession properties weren't set because of an error.")
-				}
-			
-			
+			translateTextToSpeech(with: textForSpeech)
 			textLabel.text = tempResult
 		}
 		else {
@@ -188,34 +132,67 @@ class ViewController: UIViewController, SFSpeechRecognizerDelegate {
 		}
 	}
 	
-	func recordAndRecognizeSpeech() {
-		let node = audioEngine.inputNode
-		let recordingFormat = node.outputFormat(forBus: 0)
-		node.installTap(onBus: 0, bufferSize: 1024, format: recordingFormat) { buffer, _ in
-			self.request.append(buffer)
-		}
+	func translateTextToSpeech(with string: String) {
+		let speechUtterance: AVSpeechUtterance = AVSpeechUtterance(string: string)
+		speechUtterance.rate = AVSpeechUtteranceMaximumSpeechRate / 2.0
+		speechUtterance.voice = AVSpeechSynthesisVoice(language: "ru-RU")
+		self.speechSynthesizer.speak(speechUtterance)
 		
-		audioEngine.prepare()
+		let audioSession = AVAudioSession.sharedInstance()
 		do {
-			try audioEngine.start()
-		} catch {
-			return print(error)
-		}
-		
-		guard let myRecognizer = SFSpeechRecognizer() else { return }
-		if !myRecognizer.isAvailable {
-			return
-		}
-		
-		recognitionTask = speechRecognizer?.recognitionTask(with: request, resultHandler: { result, error in
-			if let result = result {
-				let bestResult = result.bestTranscription.formattedString
-				self.textLabel.text = bestResult
-				
-			} else if let error = error {
-				print(error)
+			try audioSession.setMode(AVAudioSession.Mode.spokenAudio)
+			
+			let currentRoute = AVAudioSession.sharedInstance().currentRoute
+			for description in currentRoute.outputs {
+				if description.portType == AVAudioSession.Port.headphones {
+					try audioSession.overrideOutputAudioPort(AVAudioSession.PortOverride.none)
+					print("headphone plugged in")
+				} else {
+					print("headphone pulled out")
+					try audioSession.overrideOutputAudioPort(AVAudioSession.PortOverride.speaker)
+				}
 			}
-		})
+			
+		} catch {
+			print("audioSession properties weren't set because of an error.")
+		}
+		
 	}
 	
+	func recordAndRecognizeSpeech() {
+		let node = audioEngine.inputNode
+		
+		if audioEngine.isRunning {
+			audioEngine.stop()
+			request.endAudio()
+			node.removeTap(onBus: 0)
+		} else {
+			let recordingFormat = node.outputFormat(forBus: 0)
+			node.installTap(onBus: 0, bufferSize: 1024, format: recordingFormat) { buffer, _ in
+				self.request.append(buffer)
+			}
+			
+			audioEngine.prepare()
+			do {
+				try audioEngine.start()
+			} catch {
+				return print(error)
+			}
+			
+			guard let myRecognizer = SFSpeechRecognizer() else { return }
+			if !myRecognizer.isAvailable {
+				return
+			}
+			
+			recognitionTask = speechRecognizer?.recognitionTask(with: request, resultHandler: { result, error in
+				if let result = result {
+					let bestResult = result.bestTranscription.formattedString
+					self.textLabel.text = bestResult
+					
+				} else if let error = error {
+					print(error)
+				}
+			})
+		}
+	}
 }
